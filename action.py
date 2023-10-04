@@ -383,44 +383,49 @@ class ActionManagement:
 			
 			if res.status_code == 200:
 				page = BeautifulSoup(res.content, "html.parser")
-				product_url = page.find(class_='productItem__link')
-				
-				if product_url:
-					product_url = "https://shopping.bookoff.co.jp" + product_url.get('href')
-				else:
-					return
-				
-				price_element = page.find(class_='productItem__price').text
-				stock_element = page.find_all(class_="productItem__stock--alert")
-				price_element = price_element.replace(',', '')
-				price = int(re.findall(r'\d+', price_element)[0])
-				stock = '在庫なし' if stock_element else ''
-				
-				price_status = ''
-				print(self.price_diff)
-				if other_price > price:
-					percent = price / (other_price / 100)
+				product_elements = page.find_all(class_='productItem')
+				if(len(product_elements) > 0):
+					product_element = product_elements[0]
+					product_url = product_element.find(class_='productItem__link')
 					
-					if (100 - percent) >= int(self.price_diff):
-						price_status = str(other_price - price)
+					if product_url:
+						product_url = "https://shopping.bookoff.co.jp" + product_url.get('href')
+					else:
+						return
 				
-						product_data = {
-							'jan': key_code,
-							'url': product_url,
-							'stock': stock,
-							'site_price': str(price),
-							'amazon_price': str(other_price),
-							'price_status': price_status
-						}
-						self.products_list.append(product_data)
-
-						# # Insert data into the database
-						# cursor.execute("INSERT INTO history (id, jan, url, stock, site_price, amazon_price, price_status) "
-						# 			"VALUES (?, ?, ?, ?, ?, ?, ?)",
-						# 			(cur_position, key_code, product_url, stock, price, other_price, price_status))
-						# conn.commit()
+					price_element = product_element.find(class_='productItem__price').text
+					stock_element = product_element.find_all(class_="productItem__stock--alert")
+					price_element = price_element.replace(',', '')
+					price = int(re.findall(r'\d+', price_element)[0])
+					stock = '在庫なし' if len(stock_element) > 0 else ''
+				
+					price_status = ''
+					print(self.price_diff)
+					if other_price > price:
+						print('=========================')
+						print(len(stock_element))
+						percent = price / (other_price / 100)
 						
-						self.draw_table(self.products_list)
+						if (100 - percent) >= int(self.price_diff):
+							price_status = str(other_price - price)
+					
+							product_data = {
+								'jan': key_code,
+								'url': product_url,
+								'stock': stock,
+								'site_price': str(price),
+								'amazon_price': str(other_price),
+								'price_status': price_status
+							}
+							self.products_list.append(product_data)
+
+							# # Insert data into the database
+							# cursor.execute("INSERT INTO history (id, jan, url, stock, site_price, amazon_price, price_status) "
+							# 			"VALUES (?, ?, ?, ?, ?, ?, ?)",
+							# 			(cur_position, key_code, product_url, stock, price, other_price, price_status))
+							# conn.commit()
+							
+							self.draw_table(self.products_list)
 		
 		except sqlite3.Error as e:
 			print(f"SQLite error: {e}")
