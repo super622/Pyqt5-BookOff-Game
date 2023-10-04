@@ -442,8 +442,7 @@ class ActionManagement:
 
 		print(page)
 		print(cur_posotion)
-		url = f'https://www.amazon.co.jp/s?i=software&rh=n%3A689132&s=salesrank{page}&language=en&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=689132&pageType=Browse&qid=1695891292&softwareClass=Web+Browser&ref=sr_pg_2'		
-
+		url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&page=3&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
 		# logging.basicConfig(filename='selenium.log', level=logging.INFO)
 		chrome_options = Options()
 		chrome_options.add_argument("--headless=new")
