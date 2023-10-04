@@ -405,10 +405,7 @@ class ActionManagement:
 					stock = '在庫なし' if len(stock_element) > 0 else ''
 				
 					price_status = ''
-					print(self.price_diff)
 					if other_price > price:
-						print('=========================')
-						print(len(stock_element))
 						percent = price / (other_price / 100)
 						
 						if (100 - percent) >= int(self.price_diff):
@@ -432,8 +429,8 @@ class ActionManagement:
 							
 							self.draw_table(self.products_list)
 		
-		except sqlite3.Error as e:
-			print(f"SQLite error: {e}")
+		# except sqlite3.Error as e:
+		# 	print(f"SQLite error: {e}")
 		except requests.RequestException as e:
 			print(f"Request error: {e}")
 		# finally:
@@ -443,16 +440,14 @@ class ActionManagement:
 			# self.draw_table(self.products_list)
 
 	# get product list
-	def get_products_list(self, cur_posotion):
+	def get_products_list(self):
 		page = ''
 		if self.cur_page == 1:
 			page = ''
 		else:
 			page = '&page=' + str(self.cur_page)
 
-		print(page)
-		print(cur_posotion)
-		url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&page=3&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
+		url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
 		# logging.basicConfig(filename='selenium.log', level=logging.INFO)
 		chrome_options = Options()
 		chrome_options.add_argument("--headless=new")
@@ -474,14 +469,11 @@ class ActionManagement:
 				asin = product_element.get_attribute('data-asin')
 				asin_arr.append(asin)
 
-			print(asin_arr)
 			if(len(asin_arr) > 0):
 				asin_arr = self.array_append_and_depend(asin_arr)
 			else:
 				asin_arr = self.array_append_and_depend([])
 
-			print(asin_arr)
-			print(self.temp_arr)
 			asins = self.convert_array_to_string(asin_arr)
 			self.access_token = self.get_access_token()
 			return self.get_jan_code_by_asin(asin_arr, asins)
