@@ -189,9 +189,14 @@ class ActionManagement:
 				
 				for i in range(len(json_response['items'])):
 					product = json_response['items'][i]
-					price = product['attributes']['list_price'][0]['value'] if 'list_price' in product['attributes'] else '0'
-					if(price == '0'):
+					price = 0
+					site_price = product['attributes']['list_price'][0]['value'] if 'list_price' in product['attributes'] else '0'
+					if(site_price == '0'):
 						price = price_arr[i]
+					elif int(price_arr[i]) != 0:
+						price = site_price if int(site_price) < int(price_arr[i]) else price_arr[i]
+					else:
+						price = site_price
 					
 					temp = [
 						product['identifiers'][0]['identifiers'][0]['identifier'] if len(product['identifiers'][0]['identifiers']) > 0 else '',
