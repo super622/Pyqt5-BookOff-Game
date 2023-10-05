@@ -54,8 +54,14 @@ class RequestThread(QThread):
 					if(len(product_list) == 0 and int(self.ui_handler.temp_arr) == 0):
 						break
 
+					if self.ui_handler.main_window.isStop:
+						break
+
 					# key_arr = [['4580128895130', '', '', '10000'], ['4580128895383', '', '', '10000'], ['4988067000125', '', '', '10000']]
 					for product in product_list:
+						if self.ui_handler.main_window.isStop:
+							break
+
 						cur_position += 1
 						if(product[0] != ''):
 							self.ui_handler.get_product_url(product, cur_position)
@@ -63,6 +69,7 @@ class RequestThread(QThread):
 						progress = 100 / self.total_count * cur_position
 						self.request_completed.emit(str(progress))
 				except Exception as e:
+					self.request_completed.emit(e)
 					break
 			else:
 				break
@@ -248,7 +255,7 @@ class Ui_MainWindow(object):
 
 	def handle_btn_start_clicked(self):
 		if self.isStop:
-			self.btn_start.setEnabled(False)
+			self.btn_start.setText('停止')
 			self.ui_handler.products_list = []
 			price_diff = self.txt_price_diff.text()
 			self.request_thread = RequestThread(self.ui_handler, price_diff)
