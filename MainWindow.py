@@ -51,7 +51,7 @@ class RequestThread(QThread):
 					# product_list = self.ui_handler.get_product_info_by_product_list(cur_position)
 					product_list = self.ui_handler.get_products_list()
 
-					if(len(product_list) == 0 and int(self.ui_handler.temp_arr) == 0 and self.ui_handler.cur_page >= 400):
+					if(len(product_list) == 0 and len(self.ui_handler.temp_arr) == 0 and self.ui_handler.cur_page >= 400):
 						break
 
 					if self.ui_handler.main_window.isStop:
