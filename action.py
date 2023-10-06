@@ -193,7 +193,7 @@ class ActionManagement:
 					
 					if lowest_price == 0:
 						continue
-					
+
 					print('=============================')
 					print(temp_asin_arr[i])
 					print(lowest_price)
@@ -444,6 +444,8 @@ class ActionManagement:
 			page = ''
 		else:
 			page = '&page=' + str(self.cur_page)
+		
+		print(page)
 
 		url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
 		# logging.basicConfig(filename='selenium.log', level=logging.INFO)
@@ -461,7 +463,7 @@ class ActionManagement:
 
 		try:
 			driver.get(url)
-			time.sleep(3)
+			time.sleep(5)
 			product_elements = driver.find_elements(By.CLASS_NAME, 's-asin')
 			for product_element in product_elements:
 				asin = product_element.get_attribute('data-asin')
