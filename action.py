@@ -267,7 +267,7 @@ class ActionManagement:
 				return 0
 			else:
 				lowest_price_arr = json_response['payload']['Offers']
-				return int(lowest_price_arr[0]['ListingPrice']['Amount'])
+				# return int(lowest_price_arr[0]['ListingPrice']['Amount'])
 				return (int(lowest_price_arr[0]['ListingPrice']['Amount']) + int(lowest_price_arr[0]['Shipping']['Amount']))
 		else:
 			return 0
@@ -475,6 +475,7 @@ class ActionManagement:
 				asin_arr = self.array_append_and_depend([])
 
 			asins = self.convert_array_to_string(asin_arr)
+			print(asins)
 			self.access_token = self.get_access_token()
 			return self.get_jan_code_by_asin(asin_arr, asins)
 		except Exception as e:
