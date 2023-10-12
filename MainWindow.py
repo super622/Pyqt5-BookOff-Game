@@ -27,22 +27,6 @@ class RequestThread(QThread):
 		if(self.price_diff != ''):
 			self.ui_handler.price_diff = self.price_diff
 
-			# result = self.ui_handler.product_list_download_from_amazon()
-			# print(type(result) == str)
-			# if(type(result) == str):
-			# 	self.request_completed.emit(result)
-			# 	self.request_completed.emit("stop")
-			
-			# print(result)
-			# total = result['total']
-			# document_id = result['filepath']
-
-			# self.request_completed.emit("reading")
-			# result = self.ui_handler.read_product_list_from_file(document_id)
-			# if(result != 'success'):
-			# 	self.request_completed.emit(result)
-			# 	self.request_completed.emit('stop')
-
 		cur_position = 0
 		time_counter = 0
 		while cur_position < self.total_count:
