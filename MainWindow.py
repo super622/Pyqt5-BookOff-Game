@@ -44,6 +44,7 @@ class RequestThread(QThread):
 
 					if product_list == None:
 						time.sleep(10)
+						cur_position += 17
 						continue
 
 					if(len(product_list) == 0 and len(self.ui_handler.temp_arr) == 0):
