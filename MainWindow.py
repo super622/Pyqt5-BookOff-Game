@@ -290,7 +290,7 @@ class Ui_MainWindow(object):
 
 		document_folder = pathlib.Path.home() / "Documents"
 
-		filename = f"BookOff_{curYear}_{curMonth}_{curDay}_{curHour}_{curMinute}.xls"
+		filename = f"BookOff_GAME_{curYear}_{curMonth}_{curDay}_{curHour}_{curMinute}.xls"
 		filepath = document_folder / filename
 
 		with open(filepath, "wb") as file:
