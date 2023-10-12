@@ -383,6 +383,7 @@ class Ui_MainWindow(object):
 	
 	def handle_request_completed(self, response_text):
 		if response_text == "start":
+			self.statusLabel.setVisible(True)
 			self.statusLabel.setText("ダウンロード中...")
 			self.spinner.start()
 		elif response_text == "stop":
@@ -395,19 +396,22 @@ class Ui_MainWindow(object):
 			self.auto_save()
 		elif response_text == "complete":
 			self.auto_save()
+			self.statusLabel.setVisible(True)
 			self.statusLabel.setText("完了しました。")
 			self.progressBar.setVisible(False)
 		elif response_text == "reading":
 			self.progressBar.setValue(0)
+			self.statusLabel.setVisible(True)
 			self.statusLabel.setText("ファイルを読んでいます...")
 		elif response_text != "start" and response_text != 'stop' and response_text != 'reading' and re.findall(r'\d+', response_text) == False:
 			self.spinner.stop()
+			self.statusLabel.setVisible(True)
 			self.statusLabel.setText(response_text)
 		else:
 			self.spinner.stop()
 			cur_position = float(response_text) / (100 / self.total_count)
 			self.statusLabel.setVisible(False)
-			self.statusLabel.setText(f"{self.total_count} 個中 {round(cur_position)} 個処理済み")
+			# self.statusLabel.setText(f"{self.total_count} 個中 {round(cur_position)} 個処理済み")
 			self.progressBar.setVisible(True)
 			self.btn_export.setEnabled(True)
 			self.progressBar.setValue(round(float(response_text)))
