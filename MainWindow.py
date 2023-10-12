@@ -82,7 +82,7 @@ class RequestThread(QThread):
 							self.ui_handler.get_product_url(product, cur_position)
 
 						# progress = 100 / self.total_count * cur_position
-						progress = 100 / 10000 * cur_position
+						progress = 100 / 6800 * cur_position
 						self.request_completed.emit(str(progress))
 				except Exception as e:
 					self.request_completed.emit(e)
