@@ -361,6 +361,7 @@ class ActionManagement:
 		else:
 			length = len(self.temp_arr)
 			result = self.temp_arr[0:length]
+			self.temp_arr = []
 			return result
 
 	# get product url
