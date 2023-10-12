@@ -164,7 +164,6 @@ class ActionManagement:
 
 	# get Jan code by asin code
 	def get_jan_code_by_asin(self, temp_asin_arr, asins):
-		print(asins)
 		url = "https://sellingpartnerapi-fe.amazon.com/catalog/2022-04-01/items"
 		headers = {
             "x-amz-access-token": self.access_token,
@@ -379,7 +378,7 @@ class ActionManagement:
 			# 	else:
 			# 		cursor.execute("DELETE FROM history")
 			# 		conn.commit()
-
+			print(product)
 			key_code = product[0]
 			other_price = int(product[3])
 			

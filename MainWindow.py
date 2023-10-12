@@ -406,6 +406,7 @@ class Ui_MainWindow(object):
 		else:
 			self.spinner.stop()
 			cur_position = float(response_text) / (100 / self.total_count)
+			self.statusLabel.setVisible(False)
 			self.statusLabel.setText(f"{self.total_count} 個中 {round(cur_position)} 個処理済み")
 			self.progressBar.setVisible(True)
 			self.btn_export.setEnabled(True)
