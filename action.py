@@ -463,6 +463,7 @@ class ActionManagement:
 				for product_element in product_elements:
 					asin = product_element.get_attribute('data-asin')
 					asin_arr.append(asin)
+				driver.quit()
 
 			print(f"get asins => {len(asin_arr)}")
 			if(len(asin_arr) > 0):
@@ -476,5 +477,3 @@ class ActionManagement:
 		except Exception as e:
 			print(e)
 			return None
-		finally:
-			driver.quit()
