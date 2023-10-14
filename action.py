@@ -193,11 +193,6 @@ class ActionManagement:
 					if lowest_price == 0:
 						continue
 
-					print('=============================')
-					print(temp_asin_arr[i])
-					print(lowest_price)
-					print('=============================')
-
 					product = json_response['items'][i]
 					
 					temp = [
@@ -353,7 +348,7 @@ class ActionManagement:
 	def array_append_and_depend(self, asin_array):
 		if len(asin_array) > 0:
 			self.temp_arr = self.temp_arr + asin_array
-		if(len(self.temp_arr) >= 10):
+		if(len(self.temp_arr) > 10):
 			result = self.temp_arr[0:10]
 			self.temp_arr = self.temp_arr[10:len(self.temp_arr)]
 			return result
@@ -469,13 +464,13 @@ class ActionManagement:
 				asin = product_element.get_attribute('data-asin')
 				asin_arr.append(asin)
 
+			print(asin_arr)
 			if(len(asin_arr) > 0):
 				asin_arr = self.array_append_and_depend(asin_arr)
 			else:
 				asin_arr = self.array_append_and_depend([])
 
 			asins = self.convert_array_to_string(asin_arr)
-			print(asins)
 			self.access_token = self.get_access_token()
 			return self.get_jan_code_by_asin(asin_arr, asins)
 		except Exception as e:
