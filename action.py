@@ -184,16 +184,13 @@ class ActionManagement:
 			json_response = response.json()
 			if (len(json_response['items']) > 0):
 				for i in range(len(json_response['items'])):
+					product = json_response['items'][i]
 					if(temp_asin_arr[i] != None):
 						time.sleep(0.5)
 						lowest_price = self.get_lowest_price(temp_asin_arr[i])
-					else:
-						lowest_price = 0
 					
 					if lowest_price == 0:
 						continue
-
-					product = json_response['items'][i]
 					
 					temp = [
 						product['identifiers'][0]['identifiers'][0]['identifier'] if len(product['identifiers'][0]['identifiers']) > 0 else '',
@@ -348,14 +345,14 @@ class ActionManagement:
 	def array_append_and_depend(self, asin_array):
 		if len(asin_array) > 0:
 			self.temp_arr = self.temp_arr + asin_array
+
 		if(len(self.temp_arr) > 10):
 			result = self.temp_arr[0:10]
-			self.temp_arr = self.temp_arr[10:len(self.temp_arr)]
+			self.temp_arr = self.temp_arr[10:len(self.temp_arr)]	
 			return result
 		else:
-			length = len(self.temp_arr)
-			result = self.temp_arr[0:length]
-			self.temp_arr = []
+			result = self.temp_arr
+			self.temp_arr = []	
 			return result
 
 	# get product url
@@ -373,12 +370,12 @@ class ActionManagement:
 			# 	else:
 			# 		cursor.execute("DELETE FROM history")
 			# 		conn.commit()
-			print(product)
+			
 			key_code = product[0]
 			other_price = int(product[3])
 			
 			res = requests.get(f'https://shopping.bookoff.co.jp/search/keyword/{key_code}')
-			print(res.status_code)
+			
 			if res.status_code == 200:
 				page = BeautifulSoup(res.content, "html.parser")
 				product_elements = page.find_all(class_='productItem')
@@ -412,7 +409,7 @@ class ActionManagement:
 								'amazon_price': str(other_price),
 								'price_status': price_status
 							}
-							print(product_data)
+							
 							self.products_list.append(product_data)
 
 							# # Insert data into the database
@@ -447,12 +444,12 @@ class ActionManagement:
 		url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
 		# logging.basicConfig(filename='selenium.log', level=logging.INFO)
 		chrome_options = Options()
-		chrome_options.add_argument("--headless=new")
-		chrome_options.add_argument("--disable-gpu")
-		chrome_options.add_argument("--no-sandbox")
-		chrome_options.add_argument("--window-size=0,0")
-		chrome_options.creationflags = CREATE_NO_WINDOW
-		chrome_options.experimental_options
+		# chrome_options.add_argument("--headless=new")
+		# chrome_options.add_argument("--disable-gpu")
+		# chrome_options.add_argument("--no-sandbox")
+		# chrome_options.add_argument("--window-size=0,0")
+		# chrome_options.creationflags = CREATE_NO_WINDOW
+		# chrome_options.experimental_options
 		driver = webdriver.Chrome(options = chrome_options)
 
 		asin_arr = []
@@ -472,8 +469,6 @@ class ActionManagement:
 				asin_arr = self.array_append_and_depend(asin_arr)
 			else:
 				asin_arr = self.array_append_and_depend([])
-
-			print(self.temp_arr)
 
 			asins = self.convert_array_to_string(asin_arr)
 			self.access_token = self.get_access_token()

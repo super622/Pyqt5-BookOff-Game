@@ -36,14 +36,13 @@ class RequestThread(QThread):
 					self.ui_handler.cur_page += 1
 					# product_list = self.ui_handler.get_product_info_by_product_list(cur_position)
 					product_list = self.ui_handler.get_products_list()
-					print('=================================')
-					print(self.ui_handler.temp_arr)
-					print('******************************************')
 
 					if product_list == None:
 						time.sleep(10)
 						cur_position += 10
 						continue
+
+					print(f"product list => {len(product_list)} === temp list => {len(self.ui_handler.temp_arr)}")
 
 					if(len(product_list) == 0 and len(self.ui_handler.temp_arr) == 0):
 						self.request_completed.emit("complete")
@@ -52,10 +51,6 @@ class RequestThread(QThread):
 					if self.ui_handler.main_window.isStop:
 						self.request_completed.emit("complete")
 						break
-
-					if len(product_list) == 0:
-						cur_position += 10
-						continue
 
 					# key_arr = [['4580128895130', '', '', '10000'], ['4580128895383', '', '', '10000'], ['4988067000125', '', '', '10000']]
 					for product in product_list:
