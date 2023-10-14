@@ -38,9 +38,9 @@ class RequestThread(QThread):
 					self.ui_handler.cur_page += 1
 					# product_list = self.ui_handler.get_product_info_by_product_list(cur_position)
 					product_list = self.ui_handler.get_products_list()
-
-					print(f"product list = > {product_list}")
-					print(f"temp list => {self.ui_handler.temp_arr}")
+					print('=================================')
+					print(self.ui_handler.temp_arr)
+					print('******************************************')
 
 					if product_list == None:
 						time.sleep(10)

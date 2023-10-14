@@ -440,6 +440,7 @@ class ActionManagement:
 		else:
 			page = '&page=' + str(self.cur_page)
 		
+		print(self.cur_page)
 		print(page)
 
 		url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
