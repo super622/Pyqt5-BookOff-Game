@@ -18,7 +18,8 @@ class RequestThread(QThread):
 	def __init__(self, handler, price_diff):
 		super().__init__()
 		self.ui_handler = handler
-		self.total_count = 50000
+		# self.total_count = 50000
+		self.total_count = 6800
 		self.price_diff = price_diff
 
 	def run(self):
@@ -48,12 +49,13 @@ class RequestThread(QThread):
 						self.request_completed.emit("complete")
 						self.request_completed.emit('save')
 						cur_position = self.total_count
-						print("end === ")
+						print("end @=== ")
 						break
 
 					if self.ui_handler.main_window.isStop:
 						self.request_completed.emit("complete")
 						cur_position = self.total_count
+						print('stop !')
 						break
 
 					# key_arr = [['4580128895130', '', '', '10000'], ['4580128895383', '', '', '10000'], ['4988067000125', '', '', '10000']]
@@ -67,11 +69,11 @@ class RequestThread(QThread):
 							self.ui_handler.get_product_url(product, cur_position)
 					
 					cur_position += 10
-					# progress = 100 / self.total_count * cur_position
-					progress = 100 / 6800 * cur_position
+					progress = 100 / self.total_count * cur_position
 					self.request_completed.emit(str(progress))
 				except Exception as e:
 					self.request_completed.emit(e)
+					print(e)
 					break
 			else:
 				break
