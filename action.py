@@ -465,6 +465,8 @@ class ActionManagement:
 				asin = product_element.get_attribute('data-asin')
 				asin_arr.append(asin)
 
+			print(asin_arr)
+			print('----------------------------------------')
 			if(len(asin_arr) > 0):
 				asin_arr = self.array_append_and_depend(asin_arr)
 			else:
