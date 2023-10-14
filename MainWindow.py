@@ -33,8 +33,6 @@ class RequestThread(QThread):
 			start_time = time.time()
 			if not self.ui_handler.main_window.isStop:
 				try:
-					cur_position += 1
-
 					self.ui_handler.cur_page += 1
 					# product_list = self.ui_handler.get_product_info_by_product_list(cur_position)
 					product_list = self.ui_handler.get_products_list()
@@ -44,7 +42,7 @@ class RequestThread(QThread):
 
 					if product_list == None:
 						time.sleep(10)
-						cur_position += 17
+						cur_position += 10
 						continue
 
 					if(len(product_list) == 0 and len(self.ui_handler.temp_arr) == 0):
@@ -65,13 +63,13 @@ class RequestThread(QThread):
 							self.request_completed.emit("complete")
 							break
 
-						cur_position += 1
 						if(product[0] != ''):
 							self.ui_handler.get_product_url(product, cur_position)
-
-						# progress = 100 / self.total_count * cur_position
-						progress = 100 / 6800 * cur_position
-						self.request_completed.emit(str(progress))
+					
+					cur_position += 10
+					# progress = 100 / self.total_count * cur_position
+					progress = 100 / 6800 * cur_position
+					self.request_completed.emit(str(progress))
 				except Exception as e:
 					self.request_completed.emit(e)
 					break

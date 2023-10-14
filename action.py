@@ -378,7 +378,7 @@ class ActionManagement:
 			other_price = int(product[3])
 			
 			res = requests.get(f'https://shopping.bookoff.co.jp/search/keyword/{key_code}')
-			
+			print(res.status_code)
 			if res.status_code == 200:
 				page = BeautifulSoup(res.content, "html.parser")
 				product_elements = page.find_all(class_='productItem')
@@ -412,6 +412,7 @@ class ActionManagement:
 								'amazon_price': str(other_price),
 								'price_status': price_status
 							}
+							print(product_data)
 							self.products_list.append(product_data)
 
 							# # Insert data into the database
