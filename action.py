@@ -464,11 +464,12 @@ class ActionManagement:
 				asin = product_element.get_attribute('data-asin')
 				asin_arr.append(asin)
 
-			print(asin_arr)
 			if(len(asin_arr) > 0):
 				asin_arr = self.array_append_and_depend(asin_arr)
 			else:
 				asin_arr = self.array_append_and_depend([])
+
+			print(self.temp_arr)
 
 			asins = self.convert_array_to_string(asin_arr)
 			self.access_token = self.get_access_token()
