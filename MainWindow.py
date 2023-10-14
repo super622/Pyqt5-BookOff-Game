@@ -47,18 +47,20 @@ class RequestThread(QThread):
 					if(len(product_list) == 0 and len(self.ui_handler.temp_arr) == 0):
 						self.request_completed.emit("complete")
 						self.request_completed.emit('save')
-						print("end === ")
 						cur_position = self.total_count
+						print("end === ")
 						break
 
 					if self.ui_handler.main_window.isStop:
 						self.request_completed.emit("complete")
+						cur_position = self.total_count
 						break
 
 					# key_arr = [['4580128895130', '', '', '10000'], ['4580128895383', '', '', '10000'], ['4988067000125', '', '', '10000']]
 					for product in product_list:
 						if self.ui_handler.main_window.isStop:
 							self.request_completed.emit("complete")
+							cur_position = self.total_count
 							break
 
 						if(product[0] != ''):
