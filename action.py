@@ -456,15 +456,15 @@ class ActionManagement:
 		asins = ''
 
 		try:
-			driver.get(url)
-			time.sleep(5)
-			product_elements = driver.find_elements(By.CLASS_NAME, 's-asin')
-			for product_element in product_elements:
-				asin = product_element.get_attribute('data-asin')
-				asin_arr.append(asin)
+			if(self.cur_page <= 400):
+				driver.get(url)
+				time.sleep(5)
+				product_elements = driver.find_elements(By.CLASS_NAME, 's-asin')
+				for product_element in product_elements:
+					asin = product_element.get_attribute('data-asin')
+					asin_arr.append(asin)
 
-			print(asin_arr)
-			print('----------------------------------------')
+			print(f"get asins => {len(asin_arr)}")
 			if(len(asin_arr) > 0):
 				asin_arr = self.array_append_and_depend(asin_arr)
 			else:
