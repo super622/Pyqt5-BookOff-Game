@@ -441,22 +441,22 @@ class ActionManagement:
 		print(self.cur_page)
 		print(page)
 
-		url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
-		# logging.basicConfig(filename='selenium.log', level=logging.INFO)
-		chrome_options = Options()
-		# chrome_options.add_argument("--headless=new")
-		# chrome_options.add_argument("--disable-gpu")
-		# chrome_options.add_argument("--no-sandbox")
-		# chrome_options.add_argument("--window-size=0,0")
-		# chrome_options.creationflags = CREATE_NO_WINDOW
-		# chrome_options.experimental_options
-		driver = webdriver.Chrome(options = chrome_options)
-
 		asin_arr = []
 		asins = ''
+		url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
 
 		try:
 			if(self.cur_page <= 400):
+				# logging.basicConfig(filename='selenium.log', level=logging.INFO)
+				chrome_options = Options()
+				# chrome_options.add_argument("--headless=new")
+				# chrome_options.add_argument("--disable-gpu")
+				# chrome_options.add_argument("--no-sandbox")
+				# chrome_options.add_argument("--window-size=0,0")
+				# chrome_options.creationflags = CREATE_NO_WINDOW
+				# chrome_options.experimental_options
+				driver = webdriver.Chrome(options = chrome_options)
+			
 				driver.get(url)
 				time.sleep(5)
 				product_elements = driver.find_elements(By.CLASS_NAME, 's-asin')
