@@ -19,7 +19,7 @@ class RequestThread(QThread):
 		super().__init__()
 		self.ui_handler = handler
 		# self.total_count = 50000
-		self.total_count = 6800
+		self.total_count = 6400
 		self.price_diff = price_diff
 
 	def run(self):
@@ -37,11 +37,6 @@ class RequestThread(QThread):
 					self.ui_handler.cur_page += 1
 					# product_list = self.ui_handler.get_product_info_by_product_list(cur_position)
 					product_list = self.ui_handler.get_products_list()
-
-					if product_list == None:
-						time.sleep(10)
-						cur_position += 10
-						continue
 
 					print(f"product list => {len(product_list)} === temp list => {len(self.ui_handler.temp_arr)}")
 
