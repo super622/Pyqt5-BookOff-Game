@@ -42,7 +42,6 @@ class RequestThread(QThread):
 
 					if(len(product_list) == 0 and len(self.ui_handler.temp_arr) == 0):
 						self.request_completed.emit("complete")
-						self.request_completed.emit('save')
 						cur_position = self.total_count
 						print("end @=== ")
 						break
@@ -82,6 +81,7 @@ class RequestThread(QThread):
 				self.request_completed.emit('save')
 			
 		print("end === ")
+		self.request_completed.emit("complete")
 		self.request_completed.emit("stop")
 		self.quit()
 
