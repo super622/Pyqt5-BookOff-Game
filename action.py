@@ -211,7 +211,7 @@ class ActionManagement:
 		length = len(before_asins) if len(cur_asins) > len(before_asins) else len(cur_asins)
 		print(f"length => {length}")
 		for i in length:
-			if(before_asins[i] == cur_asins[i]):
+			if(len(before_asins[i]) == len(cur_asins[i])):
 				true_count += 1
 		print(true_count)
 		print(length == true_count)
