@@ -208,6 +208,8 @@ class ActionManagement:
 		
 	def compare_asins(self, cur_asins, before_asins):
 		true_count = 0
+		print(len(before_asins))
+		print(len(cur_asins))
 		length = len(before_asins) if len(cur_asins) > len(before_asins) else len(cur_asins)
 		for i in length:
 			if(before_asins[i] == cur_asins[i]):
