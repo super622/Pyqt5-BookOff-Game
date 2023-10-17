@@ -437,9 +437,8 @@ class ActionManagement:
 				else:
 					compare_result = self.compare_asins(asin_arr, self.before_asins)
 					print(compare_result)
-					if(compare_result == True and len(self.temp_arr) > 0):
-						return []
-					elif(compare_result == True and len(self.temp_arr) == 0):
+					
+					if(compare_result == True and len(self.temp_arr) == 0):
 						self.end_flag += 1
 						return []
 
