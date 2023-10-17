@@ -210,7 +210,7 @@ class ActionManagement:
 		true_count = 0
 		length = len(before_asins) if len(cur_asins) > len(before_asins) else len(cur_asins)
 		for i in range(length):
-			if(len(before_asins[i]) == len(cur_asins[i])):
+			if(before_asins[i] == cur_asins[i]):
 				true_count += 1
 		
 		if(length == true_count):
