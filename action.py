@@ -213,7 +213,8 @@ class ActionManagement:
 		for i in length:
 			if(before_asins[i] == cur_asins[i]):
 				true_count += 1
-		
+		print(true_count)
+		print(length == true_count)
 		if(length == true_count):
 			return True
 		else:
