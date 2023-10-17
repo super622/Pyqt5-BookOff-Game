@@ -208,9 +208,8 @@ class ActionManagement:
 		
 	def compare_asins(self, cur_asins, before_asins):
 		true_count = 0
-		print(len(before_asins))
-		print(len(cur_asins))
 		length = len(before_asins) if len(cur_asins) > len(before_asins) else len(cur_asins)
+		print(f"length => {length}")
 		for i in length:
 			if(before_asins[i] == cur_asins[i]):
 				true_count += 1
@@ -434,7 +433,6 @@ class ActionManagement:
 					asin_arr.append(asin)
 				driver.quit()
 
-				print(len(self.before_asins))
 				if(len(self.before_asins) == 0):
 					self.before_asins = asin_arr
 				else:
