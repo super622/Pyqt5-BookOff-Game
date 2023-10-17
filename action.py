@@ -440,6 +440,8 @@ class ActionManagement:
 					
 					if(compare_result == True and len(self.temp_arr) == 0):
 						self.end_flag += 1
+						self.cur_page = 0
+						print("--------------------------------------------------------------------------------")
 						return []
 
 			print(asin_arr)
