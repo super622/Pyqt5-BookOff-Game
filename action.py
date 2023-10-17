@@ -432,17 +432,17 @@ class ActionManagement:
 					asin_arr.append(asin)
 				driver.quit()
 
-				if(len(self.before_asins) == 0):
-					self.before_asins = asin_arr
-				else:
-					compare_result = self.compare_asins(asin_arr, self.before_asins)
-					print(compare_result)
-					
-					if(compare_result == True and len(self.temp_arr) == 0):
-						self.end_flag += 1
-						self.cur_page = 0
-						print("--------------------------------------------------------------------------------")
-						return []
+			if(len(self.before_asins) == 0):
+				self.before_asins = asin_arr
+			else:
+				compare_result = self.compare_asins(asin_arr, self.before_asins)
+				print(compare_result)
+				
+				if(compare_result == True and len(self.temp_arr) == 0):
+					self.end_flag += 1
+					self.cur_page = 0
+					print("--------------------------------------------------------------------------------")
+					return []
 
 			print(asin_arr)
 			print(f"get asins => {len(asin_arr)}")
