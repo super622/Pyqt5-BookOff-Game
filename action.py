@@ -21,8 +21,10 @@ from selenium.webdriver.common.by import By
 class ActionManagement:
 	products_list = []
 	price_diff = 35
+	end_flag = 0
 	cur_page = 0
 	temp_arr = []
+	before_asins = []
 	document_folder = Path.home() / "Documents"
 	amazon_folder = document_folder / "Amazon"
 	
@@ -177,7 +179,6 @@ class ActionManagement:
             "identifiers": asins
         }
 		response = requests.get(url, headers=headers, params=params)
-		# result_arr = [['', '', '', '']] * len(temp_asin_arr) # 1. jan code, 2. category, 3. ranking, 4. price
 		result_arr = []
 		
 		if response.status_code == 200:
@@ -200,44 +201,22 @@ class ActionManagement:
 					]
 					result_arr.append(temp)
 				return result_arr
-
-				# price_arr = self.get_lowest_price(asins)
-				# if price_arr is None:
-				# 	price_arr = [0] * len(temp_asin_arr)
-				
-				# price = 0
-				# for product in json_response['items']:
-				# 	print(f"product => {product['asin']}")
-				# 	for i in range(len(temp_asin_arr)):
-				# 		if len(price_arr) > 0:
-				# 			print(f"before => {price_arr[i]}")
-				# 			if(int(price_arr[i]) != 0):
-				# 				price = price_arr[i]
-				# 			else:
-				# 				print(f"after => {product['attributes']['list_price'][0]['value'] if 'list_price' in product['attributes'] else '0'}")
-				# 				price = product['attributes']['list_price'][0]['value'] if 'list_price' in product['attributes'] else '0'
-				# 		print(f"current => {price}")
-
-				# 		if(temp_asin_arr[i] == product['asin']):
-				# 			print(f"selected => {price} asin = {temp_asin_arr[i]}")
-				# 			print(len(result_arr))
-				# 			print(i)
-				# 			print('selected')
-				# 			result_arr[len(result_arr) - len(result_arr) + i] = [
-				# 				product["identifiers"][0]["identifiers"][0]["identifier"]
-				# 				if product.get("identifiers") else "",
-				# 				product["salesRanks"][0]["displayGroupRanks"][0]["title"]
-				# 				if product.get("salesRanks") else "",
-				# 				product["salesRanks"][0]["displayGroupRanks"][0]["rank"]
-				# 				if product.get("salesRanks") else "",
-				# 				price
-				# 			]
-				# 	print(result_arr)
-				# return result_arr
 			else:
 				return []
 		else:
 			return []
+		
+	def compare_asins(self, cur_asins, before_asins):
+		true_count = 0
+		length = len(before_asins) if len(cur_asins) > len(before_asins) else len(cur_asins)
+		for i in length:
+			if(before_asins[i] == cur_asins[i]):
+				true_count += 1
+		
+		if(length == true_count):
+			return True
+		else:
+			return False
 
 	# Get Price of Other sellers
 	def get_lowest_price(self, asin):
@@ -358,20 +337,8 @@ class ActionManagement:
 	# get product url
 	def get_product_url(self, product, cur_position):
 		try:
-			# conn = sqlite3.connect('database.db')
-			# cursor = conn.cursor()
-
-			# if cur_position == 1:
-			# 	table = cursor.execute("SELECT * FROM sqlite_master WHERE name='history'")
-			# 	rows = table.fetchall()
-			# 	if len(rows) == 0:
-			# 		cursor.execute("CREATE TABLE history (id integer, jan text, url text, stock text, site_price text, amazon_price text, price_status text)")
-			# 		conn.commit()
-			# 	else:
-			# 		cursor.execute("DELETE FROM history")
-			# 		conn.commit()
-			
 			key_code = product[0]
+			print(key_code)
 			other_price = int(product[3])
 			
 			res = requests.get(f'https://shopping.bookoff.co.jp/search/keyword/{key_code}')
@@ -411,24 +378,11 @@ class ActionManagement:
 							}
 							
 							self.products_list.append(product_data)
-
-							# # Insert data into the database
-							# cursor.execute("INSERT INTO history (id, jan, url, stock, site_price, amazon_price, price_status) "
-							# 			"VALUES (?, ?, ?, ?, ?, ?, ?)",
-							# 			(cur_position, key_code, product_url, stock, price, other_price, price_status))
-							# conn.commit()
 							
 							self.draw_table(self.products_list)
 		
-		# except sqlite3.Error as e:
-		# 	print(f"SQLite error: {e}")
 		except requests.RequestException as e:
 			print(f"Request error: {e}")
-		# finally:
-		# 	conn.close()
-		# else:
-			# self.products_list.append("Not Scraped !")
-			# self.draw_table(self.products_list)
 
 	# get product list
 	def get_products_list(self):
@@ -443,28 +397,52 @@ class ActionManagement:
 
 		asin_arr = []
 		asins = ''
-		url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
-
+		url_arr = [
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A4731377051&s=salesrank{page}&dc&ds=v1%3A%2FXPQ%2Furvwwr2f6AxECwDVPAuUnDYeMcllhOrhQvp7n8&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_1",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019279051&s=salesrank{page}&dc&ds=v1%3AXMs2pimLKUhfpjc8zxykEHXEeYe9UayriIsfFKjb6L4&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_2",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2494234051&s=salesrank{page}&dc&ds=v1%3AZ9R04gq4zgkNRlUNuFG4mr2wAFcto1Slsll%2Fb6XlpGE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_3",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019287051&s=salesrank{page}&dc&ds=v1%3AK5FfTgD3DtSPg2yWpRpwi4a9XaUAdAHK%2FZGBbKS9QCs&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_4",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2540971051&s=salesrank{page}&dc&ds=v1%3AplOtMetU51WoOJAzOPAZbirGOgljYDf9CdvOHB8mJBE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_5",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A492266&s=salesrank{page}&dc&ds=v1%3AOGT4s%2Bb6NKxWhGSTCDQRacoCUxn0ujXG9L%2F5HA5w9KE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_6",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8454568051&s=salesrank{page}&dc&ds=v1%3AG%2BNXJTsU18o8WFLlEsY03kRzk6pSCHvdz9CU%2BMzkOOw&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_7",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8459821051&s=salesrank{page}&dc&ds=v1%3AdMyPVod6iGRDNnLdeM9%2F1NYOf9ZzQ0jvW%2FFUMJEX0Hc&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_8",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8499550051&s=salesrank{page}&dc&ds=v1%3AF3RhQsLrjviweG6xTh%2Bo5GKF2gWjeOciHfA1gUILWQE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_9",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A10342661051&s=salesrank{page}&dc&ds=v1%3AjzsHZhkf75CWNO%2BvdHgZDlzPJqkWbojOf8BqQiXASPA&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_10"
+		]
+		# url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
+		print(url_arr[self.end_flag])
 		try:
-			if(self.cur_page <= 400):
+			if(self.cur_page <= 330):
 				# logging.basicConfig(filename='selenium.log', level=logging.INFO)
 				chrome_options = Options()
-				chrome_options.add_argument("--headless=new")
-				chrome_options.add_argument("--disable-gpu")
-				chrome_options.add_argument("--no-sandbox")
-				chrome_options.add_argument("--window-size=0,0")
-				chrome_options.creationflags = CREATE_NO_WINDOW
-				chrome_options.experimental_options
+				# chrome_options.add_argument("--headless=new")
+				# chrome_options.add_argument("--disable-gpu")
+				# chrome_options.add_argument("--no-sandbox")
+				# chrome_options.add_argument("--window-size=0,0")
+				# chrome_options.creationflags = CREATE_NO_WINDOW
+				# chrome_options.experimental_options
 				driver = webdriver.Chrome(options = chrome_options)
-			
-				driver.get(url)
+
+				driver.get(url_arr[self.end_flag])
 				time.sleep(5)
+				
 				product_elements = driver.find_elements(By.CLASS_NAME, 's-asin')
 				for product_element in product_elements:
 					asin = product_element.get_attribute('data-asin')
 					asin_arr.append(asin)
 				driver.quit()
 
+				if(len(self.before_asins) == 0):
+					self.before_asins = asin_arr
+				else:
+					compare_result = self.compare_asins(asin_arr, self.before_asins)
+					if(compare_result == True and len(self.temp_arr) > 0):
+						return []
+					elif(compare_result == True and len(self.temp_arr) == 0):
+						self.end_flag += 1
+						return []
+
+			print(asin_arr)
 			print(f"get asins => {len(asin_arr)}")
 			if(len(asin_arr) > 0):
 				asin_arr = self.array_append_and_depend(asin_arr)

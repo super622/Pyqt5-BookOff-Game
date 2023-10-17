@@ -18,8 +18,7 @@ class RequestThread(QThread):
 	def __init__(self, handler, price_diff):
 		super().__init__()
 		self.ui_handler = handler
-		# self.total_count = 50000
-		self.total_count = 6400
+		self.total_count = 50000
 		self.price_diff = price_diff
 
 	def run(self):
@@ -30,21 +29,24 @@ class RequestThread(QThread):
 
 		cur_position = 0
 		time_counter = 0
-		while cur_position < self.total_count:
+		while cur_position <= self.total_count:
 			start_time = time.time()
 			if not self.ui_handler.main_window.isStop:
 				try:
 					self.ui_handler.cur_page += 1
-					# product_list = self.ui_handler.get_product_info_by_product_list(cur_position)
 					product_list = self.ui_handler.get_products_list()
 
 					print(f"product list => {len(product_list)} === temp list => {len(self.ui_handler.temp_arr)}")
 
 					if(len(product_list) == 0 and len(self.ui_handler.temp_arr) == 0):
-						self.request_completed.emit("complete")
-						cur_position = self.total_count
-						print("end @=== ")
-						break
+						if(self.ui_handler.end_flag < 10):
+							# self.ui_handler.end_flag += 1
+							continue
+						else:
+							self.request_completed.emit("complete")
+							cur_position = self.total_count
+							print("end @=== ")
+							break
 
 					if self.ui_handler.main_window.isStop:
 						self.request_completed.emit("complete")
@@ -52,7 +54,6 @@ class RequestThread(QThread):
 						print('stop !')
 						break
 
-					# key_arr = [['4580128895130', '', '', '10000'], ['4580128895383', '', '', '10000'], ['4988067000125', '', '', '10000']]
 					for product in product_list:
 						if self.ui_handler.main_window.isStop:
 							self.request_completed.emit("complete")
@@ -71,7 +72,7 @@ class RequestThread(QThread):
 					break
 			else:
 				break
-			
+
 			end_time = time.time()
 
 			time_counter += (start_time - end_time)
@@ -79,7 +80,7 @@ class RequestThread(QThread):
 			if(time_counter <= -3600):
 				time_counter = 0
 				self.request_completed.emit('save')
-			
+
 		print("end === ")
 		self.request_completed.emit("complete")
 		self.request_completed.emit("stop")
