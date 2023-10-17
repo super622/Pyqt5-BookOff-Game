@@ -432,10 +432,12 @@ class ActionManagement:
 					asin_arr.append(asin)
 				driver.quit()
 
+				print(len(self.before_asins))
 				if(len(self.before_asins) == 0):
 					self.before_asins = asin_arr
 				else:
 					compare_result = self.compare_asins(asin_arr, self.before_asins)
+					print(compare_result)
 					if(compare_result == True and len(self.temp_arr) > 0):
 						return []
 					elif(compare_result == True and len(self.temp_arr) == 0):
