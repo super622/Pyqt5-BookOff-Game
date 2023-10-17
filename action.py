@@ -415,12 +415,12 @@ class ActionManagement:
 			if(self.cur_page <= 330):
 				# logging.basicConfig(filename='selenium.log', level=logging.INFO)
 				chrome_options = Options()
-				# chrome_options.add_argument("--headless=new")
-				# chrome_options.add_argument("--disable-gpu")
-				# chrome_options.add_argument("--no-sandbox")
-				# chrome_options.add_argument("--window-size=0,0")
-				# chrome_options.creationflags = CREATE_NO_WINDOW
-				# chrome_options.experimental_options
+				chrome_options.add_argument("--headless=new")
+				chrome_options.add_argument("--disable-gpu")
+				chrome_options.add_argument("--no-sandbox")
+				chrome_options.add_argument("--window-size=0,0")
+				chrome_options.creationflags = CREATE_NO_WINDOW
+				chrome_options.experimental_options
 				driver = webdriver.Chrome(options = chrome_options)
 
 				driver.get(url_arr[self.end_flag])
