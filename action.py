@@ -209,12 +209,10 @@ class ActionManagement:
 	def compare_asins(self, cur_asins, before_asins):
 		true_count = 0
 		length = len(before_asins) if len(cur_asins) > len(before_asins) else len(cur_asins)
-		print(f"length => {length}")
-		for i in length:
+		for i in range(length):
 			if(len(before_asins[i]) == len(cur_asins[i])):
 				true_count += 1
-		print(true_count)
-		print(length == true_count)
+		
 		if(length == true_count):
 			return True
 		else:
