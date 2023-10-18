@@ -71,6 +71,7 @@ class RequestThread(QThread):
 					print(e)
 					break
 			else:
+				self.request_completed.emit("complete")
 				break
 
 			end_time = time.time()
