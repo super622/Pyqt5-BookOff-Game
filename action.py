@@ -401,7 +401,7 @@ class ActionManagement:
 			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A4731377051&s=salesrank{page}&dc&ds=v1%3A%2FXPQ%2Furvwwr2f6AxECwDVPAuUnDYeMcllhOrhQvp7n8&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_1",
 			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019279051&s=salesrank{page}&dc&ds=v1%3AXMs2pimLKUhfpjc8zxykEHXEeYe9UayriIsfFKjb6L4&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_2",
 			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2494234051&s=salesrank{page}&dc&ds=v1%3AZ9R04gq4zgkNRlUNuFG4mr2wAFcto1Slsll%2Fb6XlpGE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_3",
-			# f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019287051&s=salesrank{page}&dc&ds=v1%3AK5FfTgD3DtSPg2yWpRpwi4a9XaUAdAHK%2FZGBbKS9QCs&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_4",
+			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019287051&s=salesrank{page}&dc&ds=v1%3AK5FfTgD3DtSPg2yWpRpwi4a9XaUAdAHK%2FZGBbKS9QCs&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_4",
 			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2540971051&s=salesrank{page}&dc&ds=v1%3AplOtMetU51WoOJAzOPAZbirGOgljYDf9CdvOHB8mJBE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_5",
 			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A492266&s=salesrank{page}&dc&ds=v1%3AOGT4s%2Bb6NKxWhGSTCDQRacoCUxn0ujXG9L%2F5HA5w9KE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_6",
 			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8454568051&s=salesrank{page}&dc&ds=v1%3AG%2BNXJTsU18o8WFLlEsY03kRzk6pSCHvdz9CU%2BMzkOOw&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_7",
@@ -412,7 +412,7 @@ class ActionManagement:
 		# url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
 		print(url_arr[self.end_flag])
 		try:
-			if(self.cur_page <= 400):
+			if(self.cur_page <= 330):
 				# logging.basicConfig(filename='selenium.log', level=logging.INFO)
 				chrome_options = Options()
 				chrome_options.add_argument("--headless=new")
