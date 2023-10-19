@@ -446,6 +446,7 @@ class ActionManagement:
 
 			print(asin_arr)
 			print(f"get asins => {len(asin_arr)}")
+			
 			if(len(asin_arr) > 0):
 				asin_arr = self.array_append_and_depend(asin_arr)
 			else:
