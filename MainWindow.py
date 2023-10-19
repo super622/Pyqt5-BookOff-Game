@@ -69,7 +69,6 @@ class RequestThread(QThread):
 				except Exception as e:
 					self.request_completed.emit(e)
 					print(e)
-					break
 			else:
 				self.request_completed.emit("complete")
 				break
@@ -288,9 +287,17 @@ class Ui_MainWindow(object):
 		curMinute = datetime.datetime.now(pytz.timezone('Asia/Tokyo')).minute
 
 		document_folder = pathlib.Path.home() / "Documents"
+		parent_folder = document_folder / "BookOff"
+		dvd_folder = parent_folder / "GAME"
 
-		filename = f"BookOff_GAME_{curYear}_{curMonth}_{curDay}_{curHour}_{curMinute}.xls"
-		filepath = document_folder / filename
+		if not parent_folder.exists():
+			parent_folder.mkdir(parents=True)
+
+		if not dvd_folder.exists():
+			dvd_folder.mkdir(parents=True)
+
+		filename = f"BookOff_CD_DVD_{curYear}_{curMonth}_{curDay}_{curHour}_{curMinute}.xls"
+		filepath = dvd_folder / filename
 
 		with open(filepath, "wb") as file:
 			wbk = xlwt.Workbook()
