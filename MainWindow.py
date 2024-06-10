@@ -40,7 +40,6 @@ class RequestThread(QThread):
 
 					if(len(product_list) == 0 and len(self.ui_handler.temp_arr) == 0):
 						if(self.ui_handler.end_flag < 9):
-							# self.ui_handler.end_flag += 1
 							continue
 						else:
 							self.request_completed.emit("complete")
@@ -402,7 +401,6 @@ class Ui_MainWindow(object):
 			self.statusLabel.setText(response_text)
 		else:
 			self.spinner.stop()
-			cur_position = float(response_text) / (100 / self.total_count)
 			self.statusLabel.setVisible(False)
 			# self.statusLabel.setText(f"{self.total_count} 個中 {round(cur_position)} 個処理済み")
 			self.progressBar.setVisible(True)

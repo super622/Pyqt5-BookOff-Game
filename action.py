@@ -1,22 +1,14 @@
 import gzip
 import os
 import re
-import sqlite3
 import time
 import requests
-import logging
 
-
-import config
-
-from subprocess import CREATE_NO_WINDOW
 from pathlib import Path
 from PyQt5 import QtWidgets, QtGui
 from bs4 import BeautifulSoup
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
+import config
 
 class ActionManagement:
 	products_list = []
@@ -338,7 +330,6 @@ class ActionManagement:
 	def get_product_url(self, product, cur_position):
 		try:
 			key_code = product[0]
-			print(key_code)
 			other_price = int(product[3])
 			
 			res = requests.get(f'https://shopping.bookoff.co.jp/search/keyword/{key_code}')
@@ -386,51 +377,47 @@ class ActionManagement:
 
 	# get product list
 	def get_products_list(self):
-		page = ''
-		if self.cur_page == 1:
-			page = ''
-		else:
-			page = '&page=' + str(self.cur_page)
-		
-		print(self.cur_page)
-		print(page)
-
-		asin_arr = []
-		asins = ''
-		url_arr = [
-			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A4731377051&s=salesrank{page}&dc&ds=v1%3A%2FXPQ%2Furvwwr2f6AxECwDVPAuUnDYeMcllhOrhQvp7n8&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_1",
-			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019279051&s=salesrank{page}&dc&ds=v1%3AXMs2pimLKUhfpjc8zxykEHXEeYe9UayriIsfFKjb6L4&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_2",
-			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2494234051&s=salesrank{page}&dc&ds=v1%3AZ9R04gq4zgkNRlUNuFG4mr2wAFcto1Slsll%2Fb6XlpGE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_3",
-			# f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019287051&s=salesrank{page}&dc&ds=v1%3AK5FfTgD3DtSPg2yWpRpwi4a9XaUAdAHK%2FZGBbKS9QCs&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_4",
-			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2540971051&s=salesrank{page}&dc&ds=v1%3AplOtMetU51WoOJAzOPAZbirGOgljYDf9CdvOHB8mJBE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_5",
-			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A492266&s=salesrank{page}&dc&ds=v1%3AOGT4s%2Bb6NKxWhGSTCDQRacoCUxn0ujXG9L%2F5HA5w9KE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_6",
-			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8454568051&s=salesrank{page}&dc&ds=v1%3AG%2BNXJTsU18o8WFLlEsY03kRzk6pSCHvdz9CU%2BMzkOOw&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_7",
-			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8459821051&s=salesrank{page}&dc&ds=v1%3AdMyPVod6iGRDNnLdeM9%2F1NYOf9ZzQ0jvW%2FFUMJEX0Hc&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_8",
-			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8499550051&s=salesrank{page}&dc&ds=v1%3AF3RhQsLrjviweG6xTh%2Bo5GKF2gWjeOciHfA1gUILWQE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_9",
-			f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A10342661051&s=salesrank{page}&dc&ds=v1%3AjzsHZhkf75CWNO%2BvdHgZDlzPJqkWbojOf8BqQiXASPA&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_10"
-		]
-		# url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
-		print(url_arr[self.end_flag])
 		try:
-			if(self.cur_page <= 400):
-				# logging.basicConfig(filename='selenium.log', level=logging.INFO)
-				chrome_options = Options()
-				chrome_options.add_argument("--headless=new")
-				chrome_options.add_argument("--disable-gpu")
-				chrome_options.add_argument("--no-sandbox")
-				chrome_options.add_argument("--window-size=0,0")
-				chrome_options.creationflags = CREATE_NO_WINDOW
-				chrome_options.experimental_options
-				driver = webdriver.Chrome(options = chrome_options)
+			page = ''
+			if self.cur_page == 1:
+				page = ''
+			else:
+				page = '&page=' + str(self.cur_page)
+			
+			print(self.cur_page)
+			print(page)
 
-				driver.get(url_arr[self.end_flag])
-				time.sleep(5)
-				
-				product_elements = driver.find_elements(By.CLASS_NAME, 's-asin')
-				for product_element in product_elements:
-					asin = product_element.get_attribute('data-asin')
-					asin_arr.append(asin)
-				driver.quit()
+			asin_arr = []
+			asins = ''
+			url_arr = [
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A4731377051&s=salesrank{page}&dc&ds=v1%3A%2FXPQ%2Furvwwr2f6AxECwDVPAuUnDYeMcllhOrhQvp7n8&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_1",
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019279051&s=salesrank{page}&dc&ds=v1%3AXMs2pimLKUhfpjc8zxykEHXEeYe9UayriIsfFKjb6L4&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_2",
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2494234051&s=salesrank{page}&dc&ds=v1%3AZ9R04gq4zgkNRlUNuFG4mr2wAFcto1Slsll%2Fb6XlpGE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_3",
+				# f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019287051&s=salesrank{page}&dc&ds=v1%3AK5FfTgD3DtSPg2yWpRpwi4a9XaUAdAHK%2FZGBbKS9QCs&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_4",
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2540971051&s=salesrank{page}&dc&ds=v1%3AplOtMetU51WoOJAzOPAZbirGOgljYDf9CdvOHB8mJBE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_5",
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A492266&s=salesrank{page}&dc&ds=v1%3AOGT4s%2Bb6NKxWhGSTCDQRacoCUxn0ujXG9L%2F5HA5w9KE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_6",
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8454568051&s=salesrank{page}&dc&ds=v1%3AG%2BNXJTsU18o8WFLlEsY03kRzk6pSCHvdz9CU%2BMzkOOw&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_7",
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8459821051&s=salesrank{page}&dc&ds=v1%3AdMyPVod6iGRDNnLdeM9%2F1NYOf9ZzQ0jvW%2FFUMJEX0Hc&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_8",
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8499550051&s=salesrank{page}&dc&ds=v1%3AF3RhQsLrjviweG6xTh%2Bo5GKF2gWjeOciHfA1gUILWQE&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_9",
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A10342661051&s=salesrank{page}&dc&ds=v1%3AjzsHZhkf75CWNO%2BvdHgZDlzPJqkWbojOf8BqQiXASPA&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_nr_n_10"
+			]
+			# url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_2"
+			
+			if(len(url_arr) - 1 < self.end_flag):
+				return []
+
+			print(url_arr[self.end_flag])
+
+			if(self.cur_page <= 400):
+				response = requests.get(url_arr[self.end_flag])
+				if response.status_code == 200:
+					page = BeautifulSoup(response.content, "html.parser")
+					product_elements = page.find_all(class_='s-asin')
+					for product_element in product_elements:
+						asin = product_element['data-asin']
+						asin_arr.append(asin)
+			else:
+				return []
 
 			if(len(self.before_asins) == 0):
 				self.before_asins = asin_arr
@@ -441,7 +428,6 @@ class ActionManagement:
 				if(compare_result == True and len(self.temp_arr) == 0):
 					self.end_flag += 1
 					self.cur_page = 0
-					print("--------------------------------------------------------------------------------")
 					return []
 
 			print(asin_arr)
