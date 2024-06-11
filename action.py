@@ -384,8 +384,7 @@ class ActionManagement:
 			else:
 				page = '&page=' + str(self.cur_page)
 			
-			print(self.cur_page)
-			print(page)
+			print(f"page : {self.cur_page} end flag : {self.end_flag}")
 
 			asin_arr = []
 			asins = ''
@@ -393,7 +392,7 @@ class ActionManagement:
 				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A4731377051&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}",
 				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019279051&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}",
 				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2494234051&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}",
-				# f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019287051&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}",
+				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8019287051&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}",
 				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A2540971051&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}",
 				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A492266&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}",
 				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8454568051&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}",
@@ -401,12 +400,9 @@ class ActionManagement:
 				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A8499550051&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}",
 				f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394%2Cn%3A10342661051&s=salesrank%7Bpage%7D&dc{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1697520203&rnid=637394&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}"
 			]
-			# url = f"https://www.amazon.co.jp/s?i=videogames&rh=n%3A637394&s=salesrank{page}&applicationType=BROWSER&deviceOS=Windows&handlerName=BrowsePage&pageId=637394&pageType=Browse&qid=1696382034&softwareClass=Web+Browser&ref=sr_pg_{self.cur_page}"
-			
+
 			if(len(url_arr) - 1 < self.end_flag):
 				return []
-
-			print(url_arr[self.end_flag])
 
 			if(self.cur_page <= 400):
 				response = requests.get(url_arr[self.end_flag])
@@ -417,20 +413,13 @@ class ActionManagement:
 						asin = product_element['data-asin']
 						asin_arr.append(asin)
 			else:
+				self.end_flag += 1
+				self.cur_page = 0
 				return []
 
 			if(len(self.before_asins) == 0):
 				self.before_asins = asin_arr
-			else:
-				compare_result = self.compare_asins(asin_arr, self.before_asins)
-				print(compare_result)
 
-				if(compare_result == True and len(self.temp_arr) == 0):
-					self.end_flag += 1
-					self.cur_page = 0
-					return []
-
-			print(asin_arr)
 			print(f"get asins => {len(asin_arr)}")
 			
 			if(len(asin_arr) > 0):
